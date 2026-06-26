@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.4.0...cli-v1.4.1) (2026-06-26)
+
+
+### Bug Fixes
+
+* suppress dotenvx internal output during set operations ([9281234](https://github.com/Karasu-Lab/envctrl/commit/9281234bd2110f8fce4b2feb2b1ecd1615476505))
+* suppress dotenvx internal output during set operations ([7ca256d](https://github.com/Karasu-Lab/envctrl/commit/7ca256d87be62b85e30c029d404afb81d21b33e8))
+
 ## [1.4.0](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.3.0...cli-v1.4.0) (2026-06-26)
 
 
