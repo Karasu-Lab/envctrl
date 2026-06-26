@@ -1,5 +1,5 @@
-import os from "node:os";
-import path from "node:path";
+import os from 'node:os';
+import path from 'node:path';
 
 /**
  * Resolves the envctrl application data root directory for the current platform.
@@ -12,18 +12,17 @@ function resolveAppDataRoot(): string {
   const platform = os.platform();
   const home = os.homedir();
 
-  if (platform === "win32") {
-    const appData = process.env["APPDATA"] ?? path.join(home, "AppData", "Roaming");
-    return path.join(appData, "envctrl");
+  if (platform === 'win32') {
+    const appData = process.env['APPDATA'] ?? path.join(home, 'AppData', 'Roaming');
+    return path.join(appData, 'envctrl');
   }
 
-  if (platform === "darwin") {
-    return path.join(home, "Library", "Application Support", "envctrl");
+  if (platform === 'darwin') {
+    return path.join(home, 'Library', 'Application Support', 'envctrl');
   }
 
-  const xdgDataHome =
-    process.env["XDG_DATA_HOME"] ?? path.join(home, ".local", "share");
-  return path.join(xdgDataHome, "envctrl");
+  const xdgDataHome = process.env['XDG_DATA_HOME'] ?? path.join(home, '.local', 'share');
+  return path.join(xdgDataHome, 'envctrl');
 }
 
 /**
@@ -34,7 +33,7 @@ function resolveAppDataRoot(): string {
  * the default keystore is removed.
  */
 export function resolveDefaultKeystorePath(): string {
-  return path.join(resolveAppDataRoot(), "keystores", "default");
+  return path.join(resolveAppDataRoot(), 'keystores', 'default');
 }
 
 /**
@@ -44,5 +43,5 @@ export function resolveDefaultKeystorePath(): string {
  * so it survives keystore deletion.
  */
 export function resolveKeystoresRegistryPath(): string {
-  return path.join(resolveAppDataRoot(), "keystores.json");
+  return path.join(resolveAppDataRoot(), 'keystores.json');
 }

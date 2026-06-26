@@ -1,12 +1,7 @@
-import fs from "node:fs/promises";
-import type {
-  CommandContext,
-  CommandResult,
-  ISubCommand,
-  KeystoreEntry,
-} from "@envctrl/types";
-import { resolveKeystoresRegistryPath } from "../../utils/platform.js";
-import { readRegistry, writeRegistry } from "./registry.js";
+import fs from 'node:fs/promises';
+import type { CommandContext, CommandResult, ISubCommand, KeystoreEntry } from '@envctrl/types';
+import { resolveKeystoresRegistryPath } from '../../utils/platform.js';
+import { readRegistry, writeRegistry } from './registry.js';
 
 /** Options parsed by Commander for `keystore delete`. */
 export interface KeystoreDeleteOptions {
@@ -20,13 +15,11 @@ export interface KeystoreDeleteOptions {
  * Requires `--force` flag to skip the confirmation guard. Without it,
  * the command exits early with a descriptive error.
  */
-export class KeystoreDeleteSubCommand
-  implements ISubCommand<KeystoreDeleteOptions, KeystoreEntry>
-{
+export class KeystoreDeleteSubCommand implements ISubCommand<KeystoreDeleteOptions, KeystoreEntry> {
   /** @inheritdoc */
   async execute(
     options: KeystoreDeleteOptions,
-    _context: CommandContext
+    _context: CommandContext,
   ): Promise<CommandResult<KeystoreEntry>> {
     const { name, force } = options;
 

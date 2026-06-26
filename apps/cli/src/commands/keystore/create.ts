@@ -1,16 +1,8 @@
-import fs from "node:fs/promises";
-import path from "node:path";
-import type {
-  CommandContext,
-  CommandResult,
-  ISubCommand,
-  KeystoreConfig,
-} from "@envctrl/types";
-import {
-  resolveDefaultKeystorePath,
-  resolveKeystoresRegistryPath,
-} from "../../utils/platform.js";
-import { readRegistry, writeRegistry } from "./registry.js";
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import type { CommandContext, CommandResult, ISubCommand, KeystoreConfig } from '@envctrl/types';
+import { resolveDefaultKeystorePath, resolveKeystoresRegistryPath } from '../../utils/platform.js';
+import { readRegistry, writeRegistry } from './registry.js';
 
 /** Options parsed by Commander for `keystore create`. */
 export interface KeystoreCreateOptions {
@@ -24,13 +16,14 @@ export interface KeystoreCreateOptions {
  * If no path is provided, defaults to the platform-appropriate application
  * data directory. An empty `.env.keys` stub is written on first creation.
  */
-export class KeystoreCreateSubCommand
-  implements ISubCommand<KeystoreCreateOptions, KeystoreConfig>
-{
+export class KeystoreCreateSubCommand implements ISubCommand<
+  KeystoreCreateOptions,
+  KeystoreConfig
+> {
   /** @inheritdoc */
   async execute(
     options: KeystoreCreateOptions,
-    _context: CommandContext
+    _context: CommandContext,
   ): Promise<CommandResult<KeystoreConfig>> {
     const keystorePath = options.keystorePath ?? resolveDefaultKeystorePath();
     const name = options.name ?? path.basename(keystorePath);
@@ -38,11 +31,11 @@ export class KeystoreCreateSubCommand
     try {
       await fs.mkdir(keystorePath, { recursive: true });
 
-      const keysFile = path.join(keystorePath, ".env.keys");
+      const keysFile = path.join(keystorePath, '.env.keys');
       try {
         await fs.access(keysFile);
       } catch {
-        await fs.writeFile(keysFile, "# dotenvx keys\n", "utf8");
+        await fs.writeFile(keysFile, '# dotenvx keys\n', 'utf8');
       }
 
       const registryPath = resolveKeystoresRegistryPath();

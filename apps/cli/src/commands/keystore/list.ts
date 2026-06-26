@@ -1,24 +1,17 @@
-import type {
-  CommandContext,
-  CommandResult,
-  ISubCommand,
-  KeystoreEntry,
-} from "@envctrl/types";
-import { resolveKeystoresRegistryPath } from "../../utils/platform.js";
-import { readRegistry } from "./registry.js";
+import type { CommandContext, CommandResult, ISubCommand, KeystoreEntry } from '@envctrl/types';
+import { resolveKeystoresRegistryPath } from '../../utils/platform.js';
+import { readRegistry } from './registry.js';
 
 /**
  * Lists all registered keystores from the global registry.
  *
  * Returns an empty array if no keystores have been created yet.
  */
-export class KeystoreListSubCommand
-  implements ISubCommand<Record<string, never>, KeystoreEntry[]>
-{
+export class KeystoreListSubCommand implements ISubCommand<Record<string, never>, KeystoreEntry[]> {
   /** @inheritdoc */
   async execute(
     _options: Record<string, never>,
-    _context: CommandContext
+    _context: CommandContext,
   ): Promise<CommandResult<KeystoreEntry[]>> {
     try {
       const registryPath = resolveKeystoresRegistryPath();

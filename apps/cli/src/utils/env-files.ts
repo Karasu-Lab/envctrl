@@ -1,5 +1,5 @@
-import path from "node:path";
-import type { EnvFilePair, EnvironmentName } from "@envctrl/types";
+import path from 'node:path';
+import type { EnvFilePair, EnvironmentName } from '@envctrl/types';
 
 /**
  * Derives the environment name from a `.env.*` filename.
@@ -11,23 +11,21 @@ import type { EnvFilePair, EnvironmentName } from "@envctrl/types";
  *
  * @param filename - The basename of the env file (not a full path)
  */
-export function parseEnvironmentFromFilename(
-  filename: string
-): EnvironmentName | undefined {
+export function parseEnvironmentFromFilename(filename: string): EnvironmentName | undefined {
   const base = path.basename(filename);
 
-  if (!base.startsWith(".env.")) {
+  if (!base.startsWith('.env.')) {
     return undefined;
   }
 
-  const withoutPrefix = base.slice(".env.".length);
+  const withoutPrefix = base.slice('.env.'.length);
 
-  if (!withoutPrefix || withoutPrefix === "keys") {
+  if (!withoutPrefix || withoutPrefix === 'keys') {
     return undefined;
   }
 
-  const withoutUnencrypted = withoutPrefix.endsWith(".unencrypted")
-    ? withoutPrefix.slice(0, -".unencrypted".length)
+  const withoutUnencrypted = withoutPrefix.endsWith('.unencrypted')
+    ? withoutPrefix.slice(0, -'.unencrypted'.length)
     : withoutPrefix;
 
   if (!withoutUnencrypted) {
@@ -43,10 +41,7 @@ export function parseEnvironmentFromFilename(
  * @param environment - The environment name, e.g. `"production"`
  * @param cwd - The working directory that will contain the env files
  */
-export function buildEnvFilePair(
-  environment: EnvironmentName,
-  cwd: string
-): EnvFilePair {
+export function buildEnvFilePair(environment: EnvironmentName, cwd: string): EnvFilePair {
   return {
     environment,
     unencrypted: path.resolve(cwd, `.env.${environment}.unencrypted`),
@@ -64,14 +59,14 @@ export function buildEnvFilePair(
 export function parseEnvContent(content: string): Record<string, string> {
   const result: Record<string, string> = {};
 
-  for (const line of content.split("\n")) {
+  for (const line of content.split('\n')) {
     const trimmed = line.trim();
 
-    if (!trimmed || trimmed.startsWith("#")) {
+    if (!trimmed || trimmed.startsWith('#')) {
       continue;
     }
 
-    const eqIdx = trimmed.indexOf("=");
+    const eqIdx = trimmed.indexOf('=');
     if (eqIdx === -1) {
       continue;
     }
@@ -95,7 +90,7 @@ export function parseEnvContent(content: string): Record<string, string> {
  * @param value - The new value
  */
 export function upsertEnvLine(content: string, key: string, value: string): string {
-  const lines = content.split("\n");
+  const lines = content.split('\n');
   const pattern = new RegExp(`^${key}\\s*=`);
   let replaced = false;
 
@@ -108,12 +103,12 @@ export function upsertEnvLine(content: string, key: string, value: string): stri
   });
 
   if (!replaced) {
-    if (updated[updated.length - 1] !== "") {
+    if (updated[updated.length - 1] !== '') {
       updated.push(`${key}=${value}`);
     } else {
       updated.splice(updated.length - 1, 0, `${key}=${value}`);
     }
   }
 
-  return updated.join("\n");
+  return updated.join('\n');
 }

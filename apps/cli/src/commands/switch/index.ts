@@ -1,17 +1,12 @@
-import fs from "node:fs/promises";
-import os from "node:os";
-import path from "node:path";
-import type { Command } from "commander";
-import type {
-  CommandContext,
-  CommandResult,
-  ISubCommand,
-  SwitchResult,
-} from "@envctrl/types";
-import { BaseCommand } from "../../base-command.js";
-import { buildEnvFilePair } from "../../utils/env-files.js";
-import { setKeyValue } from "../../utils/dotenvx.js";
-import { syncUnencryptedToEncrypted } from "./sync.js";
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import type { Command } from 'commander';
+import type { CommandContext, CommandResult, ISubCommand, SwitchResult } from '@envctrl/types';
+import { BaseCommand } from '../../base-command.js';
+import { buildEnvFilePair } from '../../utils/env-files.js';
+import { setKeyValue } from '../../utils/dotenvx.js';
+import { syncUnencryptedToEncrypted } from './sync.js';
 
 /** Options parsed by Commander for the `switch` subcommand. */
 interface SwitchOptions {
@@ -29,7 +24,7 @@ export class SwitchCommand implements ISubCommand<SwitchOptions, SwitchResult> {
   /** @inheritdoc */
   async execute(
     options: SwitchOptions,
-    context: CommandContext
+    context: CommandContext,
   ): Promise<CommandResult<SwitchResult>> {
     const { environment, cwd } = { ...options, cwd: context.cwd };
     const pair = buildEnvFilePair(environment, cwd);
@@ -39,7 +34,7 @@ export class SwitchCommand implements ISubCommand<SwitchOptions, SwitchResult> {
       try {
         await fs.access(pair.unencrypted);
       } catch {
-        await fs.writeFile(pair.unencrypted, "", "utf8");
+        await fs.writeFile(pair.unencrypted, '', 'utf8');
         created.push(pair.unencrypted);
       }
 
@@ -57,21 +52,20 @@ export class SwitchCommand implements ISubCommand<SwitchOptions, SwitchResult> {
           .catch(() => true);
 
         if (stillMissing) {
-          setKeyValue("_ENVCTRL_INIT", "1", pair.encrypted);
+          setKeyValue('_ENVCTRL_INIT', '1', pair.encrypted);
           created.push(pair.encrypted);
         } else {
           created.push(pair.encrypted);
         }
       }
 
-      const activePath = path.resolve(cwd, ".env");
+      const activePath = path.resolve(cwd, '.env');
 
       try {
         await fs.unlink(activePath);
-      } catch {
-      }
+      } catch {}
 
-      if (os.platform() === "win32") {
+      if (os.platform() === 'win32') {
         await fs.copyFile(pair.encrypted, activePath);
       } else {
         await fs.symlink(pair.encrypted, activePath);
@@ -95,16 +89,10 @@ export class SwitchBaseCommand extends BaseCommand {
   /** @inheritdoc */
   register(program: Command): void {
     program
-      .command("switch <environment>")
-      .description(
-        "Create, sync, and activate a named environment (.env.[env])"
-      )
+      .command('switch <environment>')
+      .description('Create, sync, and activate a named environment (.env.[env])')
       .action(async (environment: string) => {
-        await this.dispatch(
-          new SwitchCommand(),
-          { environment },
-          this.buildContext(program)
-        );
+        await this.dispatch(new SwitchCommand(), { environment }, this.buildContext(program));
       });
   }
 }

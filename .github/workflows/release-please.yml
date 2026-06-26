@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       release-as:
-        description: "Override release version (e.g. 1.2.0). Leave empty to let Release Please decide."
+        description: 'Override release version (e.g. 1.2.0). Leave empty to let Release Please decide.'
         required: false
         type: string
 
