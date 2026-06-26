@@ -40,6 +40,7 @@ export function setKeyValue(
   const output = dotenvx.set(key, value, {
     path: encryptedFilePath,
     encrypt: true,
+    quiet: true,
     ...(keysFilePath ? { envKeysFile: keysFilePath } : {}),
   });
 
