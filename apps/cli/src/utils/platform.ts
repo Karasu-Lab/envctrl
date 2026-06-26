@@ -45,3 +45,8 @@ export function resolveDefaultKeystorePath(): string {
 export function resolveKeystoresRegistryPath(): string {
   return path.join(resolveAppDataRoot(), 'keystores.json');
 }
+
+/** Returns the path to the blacklist JSON file. */
+export function resolveBlacklistPath(): string {
+  return path.join(resolveAppDataRoot(), 'blacklist.json');
+}

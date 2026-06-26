@@ -63,9 +63,15 @@ export class EncryptCommand implements ISubCommand<EncryptOptions, EncryptResult
         }
       }
 
+      const lines: string[] = [
+        ...changedFiles.map((f) => `Encrypted: ${f}`),
+        ...unchangedFiles.map((f) => `Unchanged: ${f}`),
+      ];
+
       return {
         success: true,
         data: { changedFiles, unchangedFiles },
+        message: lines.length > 0 ? lines.join('\n') : 'No files processed.',
       };
     } catch (err) {
       return {

@@ -47,7 +47,11 @@ export class KeystoreDeleteSubCommand implements ISubCommand<KeystoreDeleteOptio
 
       await fs.rm(entry.path, { recursive: true, force: true });
 
-      return { success: true, data: entry };
+      return {
+        success: true,
+        data: entry,
+        message: `Deleted keystore: ${entry.name} (${entry.path})`,
+      };
     } catch (err) {
       return {
         success: false,

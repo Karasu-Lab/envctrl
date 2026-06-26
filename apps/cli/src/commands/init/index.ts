@@ -75,9 +75,20 @@ export class InitCommand implements ISubCommand<InitOptions, InitResult> {
         }
       }
 
+      const lines = [`Workspace: ${workspaceRoot}`, `Keystore:  ${keystorePath}`];
+      if (packages.length > 0) {
+        lines.push('Packages:');
+        for (const p of packages) lines.push(`  ${p.name} (${p.path})`);
+      }
+      if (keysLinked.length > 0) {
+        lines.push('Linked .env.keys:');
+        for (const l of keysLinked) lines.push(`  ${l}`);
+      }
+
       return {
         success: true,
         data: { workspaceRoot, packages, keystorePath, keysLinked },
+        message: lines.join('\n'),
       };
     } catch (err) {
       return {

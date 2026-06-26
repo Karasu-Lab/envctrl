@@ -12,6 +12,7 @@ export interface CommandResult<T = unknown> {
   readonly success: boolean;
   readonly data?: T;
   readonly error?: string;
+  readonly message?: string;
 }
 
 /**
