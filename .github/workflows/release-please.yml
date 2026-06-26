@@ -1,9 +1,12 @@
 name: Release Please
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      release-as:
+        description: "Override release version (e.g. 1.2.0). Leave empty to let Release Please decide."
+        required: false
+        type: string
 
 jobs:
   release-please:
@@ -16,3 +19,4 @@ jobs:
         with:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+          release-as: ${{ inputs.release-as }}
