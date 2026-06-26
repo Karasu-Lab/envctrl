@@ -23,3 +23,18 @@ Create a branch, commit staged or specified changes, push, and open a pull reque
    ```
 5. Push: `git push -u origin <branch>`
 6. Open PR: `gh pr create --title "type: description" --body "..."`
+
+## PR body style
+
+- Language: English only
+- Structure:
+  ```
+  ## Summary
+
+  - bullet point describing each change
+
+  🤖 Generated with [Claude Code](https://claude.com/claude-code)
+  ```
+- No "## Test plan" section
+- No Japanese text anywhere in the title or body
+- Bullets are concise: describe what changed, not step-by-step reasoning
