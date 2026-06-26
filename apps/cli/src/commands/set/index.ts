@@ -40,6 +40,7 @@ export class SetCommand implements ISubCommand<SetOptions, SetResult> {
       return {
         success: true,
         data: { environment, key, changed },
+        message: `Set ${key} in ${environment}`,
       };
     } catch (err) {
       return {

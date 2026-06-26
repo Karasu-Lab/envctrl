@@ -36,3 +36,15 @@ export interface EncryptResult {
 export interface ListResult {
   readonly environments: EnvironmentName[];
 }
+
+/** Result of an rm operation. */
+export interface RemoveResult {
+  readonly environment: EnvironmentName;
+  readonly deletedFiles: string[];
+}
+
+/** Result of a blacklist add or remove operation. */
+export interface BlacklistResult {
+  readonly environment: EnvironmentName;
+  readonly blacklisted: EnvironmentName[];
+}

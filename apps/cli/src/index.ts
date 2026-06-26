@@ -5,6 +5,8 @@ import { SetBaseCommand } from './commands/set/index.js';
 import { EncryptBaseCommand } from './commands/encrypt/index.js';
 import { InitBaseCommand } from './commands/init/index.js';
 import { ListBaseCommand } from './commands/list/index.js';
+import { RmBaseCommand } from './commands/rm/index.js';
+import { BlacklistBaseCommand } from './commands/blacklist/index.js';
 
 const program = new Command();
 
@@ -20,5 +22,7 @@ new SwitchBaseCommand().register(program);
 new KeystoreBaseCommand().register(program);
 new SetBaseCommand().register(program);
 new EncryptBaseCommand().register(program);
+new RmBaseCommand().register(program);
+new BlacklistBaseCommand().register(program);
 
 program.parseAsync(process.argv);

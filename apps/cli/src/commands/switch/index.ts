@@ -71,9 +71,15 @@ export class SwitchCommand implements ISubCommand<SwitchOptions, SwitchResult> {
         await fs.symlink(pair.encrypted, activePath);
       }
 
+      const lines = [`Switched to: ${environment}`];
+      if (created.length > 0) {
+        lines.push('Created:', ...created.map((f) => `  ${f}`));
+      }
+
       return {
         success: true,
         data: { environment, created, activePath },
+        message: lines.join('\n'),
       };
     } catch (err) {
       return {

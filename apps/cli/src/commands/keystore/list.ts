@@ -16,7 +16,16 @@ export class KeystoreListSubCommand implements ISubCommand<Record<string, never>
     try {
       const registryPath = resolveKeystoresRegistryPath();
       const entries = await readRegistry(registryPath);
-      return { success: true, data: entries };
+
+      let message: string;
+      if (entries.length === 0) {
+        message = 'No keystores registered.';
+      } else {
+        const maxLen = Math.max(...entries.map((e) => e.name.length));
+        message = entries.map((e) => `${e.name.padEnd(maxLen)}  ${e.path}`).join('\n');
+      }
+
+      return { success: true, data: entries, message };
     } catch (err) {
       return {
         success: false,

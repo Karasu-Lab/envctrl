@@ -49,7 +49,11 @@ export class KeystoreCreateSubCommand implements ISubCommand<
         await writeRegistry(registryPath, registry);
       }
 
-      return { success: true, data: { path: keystorePath } };
+      return {
+        success: true,
+        data: { path: keystorePath },
+        message: `Keystore created at: ${keystorePath}`,
+      };
     } catch (err) {
       return {
         success: false,

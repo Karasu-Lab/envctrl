@@ -1,15 +1,12 @@
 import path from 'node:path';
 import type { EnvFilePair, EnvironmentName } from '@envctrl/types';
 
+const RESERVED_ENV_NAMES = new Set(['keys', 'example']);
+
 /**
- * Derives the environment name from a `.env.*` filename.
- *
- * Rules:
- * - `.env.production` → `"production"`
- * - `.env.development.unencrypted` → `"development"` (strips `.unencrypted`)
- * - `.env` or `.env.keys` → `undefined`
- *
- * @param filename - The basename of the env file (not a full path)
+ * Derives the environment name from a `.env.*` filename, stripping `.unencrypted`
+ * and `.local` suffixes. Returns `undefined` for reserved filenames like
+ * `.env.keys` and `.env.example`.
  */
 export function parseEnvironmentFromFilename(filename: string): EnvironmentName | undefined {
   const base = path.basename(filename);
@@ -20,7 +17,7 @@ export function parseEnvironmentFromFilename(filename: string): EnvironmentName 
 
   const withoutPrefix = base.slice('.env.'.length);
 
-  if (!withoutPrefix || withoutPrefix === 'keys') {
+  if (!withoutPrefix || RESERVED_ENV_NAMES.has(withoutPrefix)) {
     return undefined;
   }
 
@@ -32,7 +29,7 @@ export function parseEnvironmentFromFilename(filename: string): EnvironmentName 
     name = name.slice(0, -'.local'.length);
   }
 
-  if (!name) {
+  if (!name || RESERVED_ENV_NAMES.has(name)) {
     return undefined;
   }
 

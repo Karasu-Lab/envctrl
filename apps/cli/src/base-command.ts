@@ -20,7 +20,7 @@ export abstract class BaseCommand {
    * Executes a subcommand and handles the result.
    *
    * Prints the error message to stderr and exits with code 1 on failure.
-   * Prints data as JSON to stdout on success when `context.quiet` is false.
+   * Prints `result.message` to stdout on success when `context.quiet` is false.
    *
    * @param cmd - The subcommand to execute
    * @param options - Parsed options from Commander
@@ -38,8 +38,8 @@ export abstract class BaseCommand {
       process.exit(1);
     }
 
-    if (!context.quiet && result.data !== undefined) {
-      process.stdout.write(JSON.stringify(result.data, null, 2) + '\n');
+    if (!context.quiet && result.message !== undefined) {
+      process.stdout.write(result.message + '\n');
     }
   }
 
