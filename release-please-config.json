@@ -1,5 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "a515b705492de5f725b37b1a180f800f363117f0",
   "packages": {
     "apps/cli": {
       "package-name": "@envctrl/cli",
