@@ -24,15 +24,19 @@ export function parseEnvironmentFromFilename(filename: string): EnvironmentName 
     return undefined;
   }
 
-  const withoutUnencrypted = withoutPrefix.endsWith('.unencrypted')
+  let name = withoutPrefix.endsWith('.unencrypted')
     ? withoutPrefix.slice(0, -'.unencrypted'.length)
     : withoutPrefix;
 
-  if (!withoutUnencrypted) {
+  if (name.endsWith('.local')) {
+    name = name.slice(0, -'.local'.length);
+  }
+
+  if (!name) {
     return undefined;
   }
 
-  return withoutUnencrypted;
+  return name;
 }
 
 /**

@@ -31,3 +31,8 @@ export interface EncryptResult {
   readonly changedFiles: string[];
   readonly unchangedFiles: string[];
 }
+
+/** Result of a list operation showing discovered environment names. */
+export interface ListResult {
+  readonly environments: EnvironmentName[];
+}
