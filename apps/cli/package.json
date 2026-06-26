@@ -1,8 +1,10 @@
 {
   "name": "@envctrl/cli",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "bin": {
     "envctrl": "./dist/index.js"
   },
@@ -13,7 +15,11 @@
     "lint": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "pnpm build"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.75.1",
