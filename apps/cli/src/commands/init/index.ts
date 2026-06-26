@@ -24,7 +24,6 @@ interface InitOptions {
  * 4. Symlinks the keystore `.env.keys` into each package directory so that
  *    dotenvx resolves the same key material across all packages when
  *    environments are switched.
- * 5. Writes `.envctrl.json` at the workspace root recording the setup.
  */
 export class InitCommand implements ISubCommand<InitOptions, InitResult> {
   /** @inheritdoc */
@@ -81,12 +80,6 @@ export class InitCommand implements ISubCommand<InitOptions, InitResult> {
         }
       }
 
-      await fs.writeFile(
-        path.join(workspaceRoot, '.envctrl.json'),
-        JSON.stringify({ workspaceRoot, keystorePath, packages }, null, 2) + '\n',
-        'utf8',
-      );
-
       return {
         success: true,
         data: { workspaceRoot, packages, keystorePath, keysLinked },
@@ -107,7 +100,7 @@ export class InitBaseCommand extends BaseCommand {
     program
       .command('init [workspace]')
       .description(
-        'Scan the workspace or monorepo, link packages to a shared keystore, and write .envctrl.json',
+        'Scan the workspace or monorepo and link packages to a shared keystore',
       )
       .option('-n, --name <name>', 'name for the keystore entry in the registry')
       .option('-k, --keystore <path>', 'custom keystore directory path')
