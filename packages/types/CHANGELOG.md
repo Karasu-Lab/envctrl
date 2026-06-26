@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/Karasu-Lab/envctrl/compare/types-v1.0.0...types-v1.1.0) (2026-06-26)
+
+
+### Features
+
+* add init command to scan workspace and link shared keystore ([00f9ec9](https://github.com/Karasu-Lab/envctrl/commit/00f9ec9b9d134a4cdf3928f28595ad36dfca66ee))
+* add init command to scan workspace and link shared keystore ([87b48fc](https://github.com/Karasu-Lab/envctrl/commit/87b48fc8224a86c34726074aa1b8ec1782a3db06))
+
 ## 1.0.0 (2026-06-26)
 
 
