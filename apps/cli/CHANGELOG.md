@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.4.2...cli-v1.5.0) (2026-06-26)
+
+
+### Features
+
+* show version at top of help output ([291518f](https://github.com/Karasu-Lab/envctrl/commit/291518fb92581ba1a1db51a3d6f3da7c2fcc5d67))
+* show version at top of help output ([0f89bd2](https://github.com/Karasu-Lab/envctrl/commit/0f89bd2ed1f71c92ff67c0375aa95d1783200742))
+
 ## [1.4.2](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.4.1...cli-v1.4.2) (2026-06-26)
 
 
