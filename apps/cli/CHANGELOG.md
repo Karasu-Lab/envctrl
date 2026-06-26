@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.2.0...cli-v1.3.0) (2026-06-26)
+
+
+### Features
+
+* add list command and support .local env file patterns ([f5d69e6](https://github.com/Karasu-Lab/envctrl/commit/f5d69e67f0e2ae301e09f2f3712f21f37fd71b6d))
+* add list command and support .local env file patterns ([8099b39](https://github.com/Karasu-Lab/envctrl/commit/8099b395cd9f293a2298b9d01e7708f564e5b26c))
+
 ## [1.2.0](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.1.0...cli-v1.2.0) (2026-06-26)
 
 
