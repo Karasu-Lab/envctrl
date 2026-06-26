@@ -13,4 +13,4 @@ export interface KeystoreConfig {
 }
 
 /** The three actions the keystore command dispatches. */
-export type KeystoreAction = "create" | "list" | "delete";
+export type KeystoreAction = 'create' | 'list' | 'delete';

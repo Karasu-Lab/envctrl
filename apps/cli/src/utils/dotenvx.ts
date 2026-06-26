@@ -1,9 +1,9 @@
-import { createRequire } from "node:module";
-import path from "node:path";
-import { execFile } from "node:child_process";
-import { promisify } from "node:util";
-import * as dotenvx from "@dotenvx/dotenvx";
-import type { DotenvxEncryptResult, DotenvxSetResult } from "@envctrl/types";
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import * as dotenvx from '@dotenvx/dotenvx';
+import type { DotenvxEncryptResult, DotenvxSetResult } from '@envctrl/types';
 
 const execFileAsync = promisify(execFile);
 
@@ -15,11 +15,11 @@ const execFileAsync = promisify(execFile);
  */
 function resolveDotenvxBin(): string {
   const require = createRequire(import.meta.url);
-  const pkgJsonPath = require.resolve("@dotenvx/dotenvx/package.json");
-  const pkgJson = require("@dotenvx/dotenvx/package.json") as {
+  const pkgJsonPath = require.resolve('@dotenvx/dotenvx/package.json');
+  const pkgJson = require('@dotenvx/dotenvx/package.json') as {
     bin: Record<string, string>;
   };
-  const binRelPath = pkgJson.bin["dotenvx"];
+  const binRelPath = pkgJson.bin['dotenvx'];
   return path.resolve(path.dirname(pkgJsonPath), binRelPath);
 }
 
@@ -35,7 +35,7 @@ export function setKeyValue(
   key: string,
   value: string,
   encryptedFilePath: string,
-  keysFilePath?: string
+  keysFilePath?: string,
 ): DotenvxSetResult {
   const output = dotenvx.set(key, value, {
     path: encryptedFilePath,
@@ -59,7 +59,7 @@ export function setKeyValue(
  */
 export async function encryptFile(filePath: string): Promise<DotenvxEncryptResult> {
   const bin = resolveDotenvxBin();
-  await execFileAsync(process.execPath, [bin, "encrypt", "-f", filePath]);
+  await execFileAsync(process.execPath, [bin, 'encrypt', '-f', filePath]);
 
   return {
     changedFilepaths: [filePath],
@@ -77,7 +77,7 @@ export async function encryptFile(filePath: string): Promise<DotenvxEncryptResul
 export function listEnvFiles(
   directory: string,
   include: string | string[],
-  exclude: string | string[]
+  exclude: string | string[],
 ): string[] {
   return dotenvx.ls(directory, include, exclude);
 }

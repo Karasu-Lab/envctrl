@@ -1,5 +1,5 @@
-import type { Command } from "commander";
-import type { CommandContext, CommandResult, ISubCommand } from "@envctrl/types";
+import type { Command } from 'commander';
+import type { CommandContext, CommandResult, ISubCommand } from '@envctrl/types';
 
 /**
  * Abstract base for all top-level CLI commands.
@@ -29,17 +29,17 @@ export abstract class BaseCommand {
   protected async dispatch<TOptions, TResult>(
     cmd: ISubCommand<TOptions, TResult>,
     options: TOptions,
-    context: CommandContext
+    context: CommandContext,
   ): Promise<void> {
     const result: CommandResult<TResult> = await cmd.execute(options, context);
 
     if (!result.success) {
-      process.stderr.write(`error: ${result.error ?? "unknown error"}\n`);
+      process.stderr.write(`error: ${result.error ?? 'unknown error'}\n`);
       process.exit(1);
     }
 
     if (!context.quiet && result.data !== undefined) {
-      process.stdout.write(JSON.stringify(result.data, null, 2) + "\n");
+      process.stdout.write(JSON.stringify(result.data, null, 2) + '\n');
     }
   }
 

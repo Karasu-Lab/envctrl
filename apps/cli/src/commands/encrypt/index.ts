@@ -1,15 +1,10 @@
-import fs from "node:fs/promises";
-import path from "node:path";
-import type { Command } from "commander";
-import type {
-  CommandContext,
-  CommandResult,
-  EncryptResult,
-  ISubCommand,
-} from "@envctrl/types";
-import { BaseCommand } from "../../base-command.js";
-import { parseEnvironmentFromFilename } from "../../utils/env-files.js";
-import { listEnvFiles, encryptFile } from "../../utils/dotenvx.js";
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import type { Command } from 'commander';
+import type { CommandContext, CommandResult, EncryptResult, ISubCommand } from '@envctrl/types';
+import { BaseCommand } from '../../base-command.js';
+import { parseEnvironmentFromFilename } from '../../utils/env-files.js';
+import { listEnvFiles, encryptFile } from '../../utils/dotenvx.js';
 
 /** Options parsed by Commander for the `encrypt` subcommand. */
 interface EncryptOptions {
@@ -31,7 +26,7 @@ export class EncryptCommand implements ISubCommand<EncryptOptions, EncryptResult
   /** @inheritdoc */
   async execute(
     options: EncryptOptions,
-    context: CommandContext
+    context: CommandContext,
   ): Promise<CommandResult<EncryptResult>> {
     const { cwd } = context;
 
@@ -39,7 +34,7 @@ export class EncryptCommand implements ISubCommand<EncryptOptions, EncryptResult
       const targets =
         options.files.length > 0
           ? options.files.map((f) => path.resolve(cwd, f))
-          : listEnvFiles(cwd, ".env.*", [".env.keys", "*.unencrypted"]);
+          : listEnvFiles(cwd, '.env.*', ['.env.keys', '*.unencrypted']);
 
       const changedFiles: string[] = [];
       const unchangedFiles: string[] = [];
@@ -55,16 +50,16 @@ export class EncryptCommand implements ISubCommand<EncryptOptions, EncryptResult
 
         const unencryptedPath = path.resolve(
           path.dirname(filePath),
-          `.env.${environment}.unencrypted`
+          `.env.${environment}.unencrypted`,
         );
 
         try {
-          const content = await fs.readFile(filePath, "utf8");
+          const content = await fs.readFile(filePath, 'utf8');
 
           try {
             await fs.access(unencryptedPath);
           } catch {
-            await fs.writeFile(unencryptedPath, content, "utf8");
+            await fs.writeFile(unencryptedPath, content, 'utf8');
           }
 
           const result = await encryptFile(filePath);
@@ -92,16 +87,10 @@ export class EncryptBaseCommand extends BaseCommand {
   /** @inheritdoc */
   register(program: Command): void {
     program
-      .command("encrypt [files...]")
-      .description(
-        "Encrypt plaintext .env.* files and create .unencrypted backups"
-      )
+      .command('encrypt [files...]')
+      .description('Encrypt plaintext .env.* files and create .unencrypted backups')
       .action(async (files: string[]) => {
-        await this.dispatch(
-          new EncryptCommand(),
-          { files },
-          this.buildContext(program)
-        );
+        await this.dispatch(new EncryptCommand(), { files }, this.buildContext(program));
       });
   }
 }
