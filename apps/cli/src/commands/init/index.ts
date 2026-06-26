@@ -5,6 +5,7 @@ import type { Command } from 'commander';
 import type { CommandContext, CommandResult, InitResult, ISubCommand } from '@envctrl/types';
 import { BaseCommand } from '../../base-command.js';
 import { resolveDefaultKeystorePath, resolveKeystoresRegistryPath } from '../../utils/platform.js';
+import { listEnvFiles } from '../../utils/dotenvx.js';
 import { readRegistry, writeRegistry } from '../keystore/registry.js';
 import { findWorkspaceRoot, scanWorkspacePackages } from './workspace.js';
 
@@ -62,6 +63,9 @@ export class InitCommand implements ISubCommand<InitOptions, InitResult> {
       const keysLinked: string[] = [];
 
       for (const dir of linkTargets) {
+        const envFiles = listEnvFiles(dir, '.env.*', ['.env.keys']);
+        if (envFiles.length === 0) continue;
+
         const linkPath = path.join(dir, '.env.keys');
         try {
           await fs.access(linkPath);
