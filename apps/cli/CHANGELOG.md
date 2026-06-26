@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.4.1...cli-v1.4.2) (2026-06-26)
+
+
+### Bug Fixes
+
+* skip .env.keys symlink in directories with no env files ([4ebb244](https://github.com/Karasu-Lab/envctrl/commit/4ebb24462e226af0f9f9f293441c296f33f2294d))
+
 ## [1.4.1](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.4.0...cli-v1.4.1) (2026-06-26)
 
 
