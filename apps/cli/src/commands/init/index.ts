@@ -16,14 +16,9 @@ interface InitOptions {
 }
 
 /**
- * Initialises envctrl for an existing workspace or monorepo.
- *
- * 1. Locates the workspace root by traversing up from the working directory.
- * 2. Scans all workspace packages.
- * 3. Creates a keystore and registers it.
- * 4. Symlinks the keystore `.env.keys` into each package directory so that
- *    dotenvx resolves the same key material across all packages when
- *    environments are switched.
+ * Initialises envctrl for an existing workspace or monorepo by creating a shared keystore
+ * and symlinking its `.env.keys` into every package directory so that dotenvx resolves
+ * the same key material across all packages when environments are switched.
  */
 export class InitCommand implements ISubCommand<InitOptions, InitResult> {
   /** @inheritdoc */
