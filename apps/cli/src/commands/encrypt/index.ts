@@ -12,15 +12,9 @@ interface EncryptOptions {
 }
 
 /**
- * Encrypts existing plaintext `.env.*` files using dotenvx.
- *
- * For each target file:
- * 1. Detects the environment name from the filename.
- * 2. Copies the plaintext content to `.env.[env].unencrypted` as a backup.
- * 3. Encrypts the file in-place via `dotenvx encrypt`.
- *
- * If no files are specified, all `.env.*` files in the working directory
- * are encrypted (excluding `.env.keys` and `*.unencrypted` files).
+ * Encrypts existing plaintext `.env.*` files using dotenvx, backing up each file's
+ * content to `.env.[env].unencrypted` before encrypting in-place.
+ * Defaults to all `.env.*` files in the working directory when no files are specified.
  */
 export class EncryptCommand implements ISubCommand<EncryptOptions, EncryptResult> {
   /** @inheritdoc */
