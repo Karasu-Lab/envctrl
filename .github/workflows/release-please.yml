@@ -48,9 +48,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm --filter @envctrl/cli build
+        run: pnpm --filter @envctrl/types --filter @envctrl/cli build
 
       - name: Publish
-        run: pnpm --filter @envctrl/cli publish --no-git-checks
+        run: pnpm --filter @envctrl/types --filter @envctrl/cli publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
