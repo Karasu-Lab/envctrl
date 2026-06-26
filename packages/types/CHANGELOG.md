@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/Karasu-Lab/envctrl/compare/types-v1.2.0...types-v1.3.0) (2026-06-26)
+
+
+### Features
+
+* add list, rm, blacklist commands with formatted English output ([2b97bdf](https://github.com/Karasu-Lab/envctrl/commit/2b97bdf585b4f7059c0799fc3c5854deeeade560))
+* add rm and blacklist commands, switch output to formatted English text ([dce1aab](https://github.com/Karasu-Lab/envctrl/commit/dce1aab9d6c345293a446612fe899392348836b2))
+
 ## [1.2.0](https://github.com/Karasu-Lab/envctrl/compare/types-v1.1.0...types-v1.2.0) (2026-06-26)
 
 
