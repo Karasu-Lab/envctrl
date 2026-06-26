@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+*.unencrypted
+.env.keys
+.env
+.env.*
+!.env.example
+.turbo/
