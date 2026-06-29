@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.0](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.7.0...cli-v1.8.0) (2026-06-29)
+
+
+### Features
+
+* support --from flag on create to copy key names from a base environment ([5ac7c1a](https://github.com/Karasu-Lab/envctrl/commit/5ac7c1a38d4bc1a4c7fc14ef8ece028b973ae32d))
+* support --from flag on create to copy key names from a base environment ([be8fa0c](https://github.com/Karasu-Lab/envctrl/commit/be8fa0c536c01d568ae2a3ff8cde56ddd3d92485))
+
 ## [1.7.0](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.6.0...cli-v1.7.0) (2026-06-29)
 
 
