@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/Karasu-Lab/envctrl/compare/types-v1.4.0...types-v1.5.0) (2026-06-29)
+
+
+### Features
+
+* add create command for environment scaffolding and .env.example generation ([3c77332](https://github.com/Karasu-Lab/envctrl/commit/3c77332767451930ac7915cde045531c055bccd5))
+* add create command for environment scaffolding and .env.example generation ([97c82b3](https://github.com/Karasu-Lab/envctrl/commit/97c82b3f59978ee75358b94b0131a85f92d4cc64))
+
 ## [1.4.0](https://github.com/Karasu-Lab/envctrl/compare/types-v1.3.0...types-v1.4.0) (2026-06-29)
 
 
