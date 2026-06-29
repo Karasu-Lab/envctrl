@@ -8,6 +8,7 @@ import { InitBaseCommand } from './commands/init/index.js';
 import { ListBaseCommand } from './commands/list/index.js';
 import { RmBaseCommand } from './commands/rm/index.js';
 import { BlacklistBaseCommand } from './commands/blacklist/index.js';
+import { CreateBaseCommand } from './commands/create/index.js';
 
 const _require = createRequire(import.meta.url);
 const { version } = _require('../package.json') as { version: string };
@@ -22,6 +23,7 @@ program
   .option('-q, --quiet', 'suppress output', false);
 
 new InitBaseCommand().register(program);
+new CreateBaseCommand().register(program);
 new ListBaseCommand().register(program);
 new SwitchBaseCommand().register(program);
 new KeystoreBaseCommand().register(program);
