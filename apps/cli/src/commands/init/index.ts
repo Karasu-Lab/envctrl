@@ -8,18 +8,28 @@ import { resolveDefaultKeystorePath, resolveKeystoresRegistryPath } from '../../
 import { listEnvFiles } from '../../utils/dotenvx.js';
 import { readRegistry, writeRegistry } from '../keystore/registry.js';
 import { findWorkspaceRoot, scanWorkspacePackages } from './workspace.js';
+import { detectBuildEnvironment } from '../../utils/build-env.js';
+import { writeConfig } from '../../utils/config.js';
 
 /** Options parsed by Commander for the `init` subcommand. */
 interface InitOptions {
   workspace: string | undefined;
   name: string | undefined;
   keystore: string | undefined;
+  /** Override the config directory name (default: `.envctrl`). */
+  configDir: string | undefined;
+  /** Override the config file name (default: `config.json`). */
+  configFile: string | undefined;
 }
 
 /**
- * Initialises envctrl for an existing workspace or monorepo by creating a shared keystore
- * and symlinking its `.env.keys` into every package directory so that dotenvx resolves
- * the same key material across all packages when environments are switched.
+ * Initialises envctrl for an existing workspace or monorepo by creating a shared keystore,
+ * symlinking `.env.keys` into every package directory, and writing a `.envctrl/config.json`
+ * that records the active environment.
+ *
+ * When a recognised CI/CD provider (Vercel, Netlify, Railway) is detected via environment
+ * variables, the environment is automatically resolved from the provider context instead of
+ * defaulting to `"development"`.
  */
 export class InitCommand implements ISubCommand<InitOptions, InitResult> {
   /** @inheritdoc */
@@ -27,6 +37,9 @@ export class InitCommand implements ISubCommand<InitOptions, InitResult> {
     const startDir = options.workspace
       ? path.resolve(context.cwd, options.workspace)
       : context.cwd;
+
+    const configDir = options.configDir ?? '.envctrl';
+    const configFile = options.configFile ?? 'config.json';
 
     try {
       const workspaceRoot = await findWorkspaceRoot(startDir);
@@ -79,6 +92,17 @@ export class InitCommand implements ISubCommand<InitOptions, InitResult> {
         }
       }
 
+      const buildEnv = detectBuildEnvironment();
+      const environment = buildEnv.environment ?? 'development';
+      const autoDetected = buildEnv.provider !== null;
+
+      const configPath = await writeConfig(
+        context.cwd,
+        { environment },
+        configDir,
+        configFile,
+      );
+
       const lines = [`Workspace: ${workspaceRoot}`, `Keystore:  ${keystorePath}`];
       if (packages.length > 0) {
         lines.push('Packages:');
@@ -88,10 +112,14 @@ export class InitCommand implements ISubCommand<InitOptions, InitResult> {
         lines.push('Linked .env.keys:');
         for (const l of keysLinked) lines.push(`  ${l}`);
       }
+      lines.push(
+        `Config:    ${configPath}`,
+        `Environment: ${environment}${autoDetected ? ` (auto-detected from ${buildEnv.provider})` : ''}`,
+      );
 
       return {
         success: true,
-        data: { workspaceRoot, packages, keystorePath, keysLinked },
+        data: { workspaceRoot, packages, keystorePath, keysLinked, configPath, environment, autoDetected },
         message: lines.join('\n'),
       };
     } catch (err) {
@@ -114,11 +142,22 @@ export class InitBaseCommand extends BaseCommand {
       )
       .option('-n, --name <name>', 'name for the keystore entry in the registry')
       .option('-k, --keystore <path>', 'custom keystore directory path')
+      .option('--config-dir <dir>', 'config directory name (default: .envctrl)')
+      .option('--config-file <file>', 'config file name (default: config.json)')
       .action(
-        async (workspace: string | undefined, opts: { name?: string; keystore?: string }) => {
+        async (
+          workspace: string | undefined,
+          opts: { name?: string; keystore?: string; configDir?: string; configFile?: string },
+        ) => {
           await this.dispatch(
             new InitCommand(),
-            { workspace, name: opts.name, keystore: opts.keystore },
+            {
+              workspace,
+              name: opts.name,
+              keystore: opts.keystore,
+              configDir: opts.configDir,
+              configFile: opts.configFile,
+            },
             this.buildContext(program),
           );
         },
