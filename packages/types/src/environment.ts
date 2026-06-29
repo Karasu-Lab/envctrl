@@ -1,6 +1,21 @@
 /** A validated environment name token, e.g. "development", "production". */
 export type EnvironmentName = string;
 
+/** Result of a `create` operation. */
+export interface CreateResult {
+  /** The environment that was created, or `"example"` when a `.env.example` was written. */
+  readonly environment: EnvironmentName;
+  /** Absolute paths of all files written by the operation. */
+  readonly createdFiles: string[];
+  /** `true` when the command generated a `.env.example` file instead of a live environment. */
+  readonly isExample: boolean;
+  /**
+   * The environment whose keys were used as the template.
+   * Only set when `isExample` is `true`.
+   */
+  readonly baseEnvironment?: EnvironmentName;
+}
+
 /**
  * Represents the pair of files that back one named environment.
  * - `unencrypted`: `.env.[env].unencrypted` — the human-editable plaintext source
