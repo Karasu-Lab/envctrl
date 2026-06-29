@@ -19,7 +19,10 @@ import { syncUnencryptedToEncrypted } from '../switch/sync.js';
 /** Options parsed by Commander for the `create` subcommand. */
 interface CreateOptions {
   environment: EnvironmentName;
-  /** Base environment to derive `.env.example` keys from (only used when environment is `"example"`). */
+  /**
+   * Base environment whose key names are copied into the new environment (values set to empty).
+   * Required when `environment` is `"example"` and omitted interactively; optional otherwise.
+   */
   from: string | undefined;
 }
 
@@ -57,9 +60,10 @@ async function buildExampleContent(unencryptedPath: string): Promise<string> {
  * - `example`: Writes `.env.example` with key names (empty values) copied from a base
  *   environment. If `--from` is omitted the user is prompted interactively.
  * - existing environment: Rejected with an error.
- * - new environment: Creates `.env.<env>.unencrypted` and the encrypted `.env.<env>`,
- *   records the environment in `.envctrl/config.json`, and re-encrypts `.env.local`
- *   from `.env.local.unencrypted` if present.
+ * - new environment: Creates `.env.<env>.unencrypted` (empty, or pre-populated with key names
+ *   from `--from` base environment) and the encrypted `.env.<env>`, records the environment
+ *   in `.envctrl/config.json`, and re-encrypts `.env.local` from `.env.local.unencrypted`
+ *   if present.
  */
 export class CreateCommand implements ISubCommand<CreateOptions, CreateResult> {
   /** @inheritdoc */
@@ -82,7 +86,7 @@ export class CreateCommand implements ISubCommand<CreateOptions, CreateResult> {
         };
       }
 
-      return await this.createEnvironment(environment, cwd);
+      return await this.createEnvironment(environment, cwd, options.from);
     } catch (err) {
       return {
         success: false,
@@ -143,14 +147,32 @@ export class CreateCommand implements ISubCommand<CreateOptions, CreateResult> {
   private async createEnvironment(
     environment: EnvironmentName,
     cwd: string,
+    from: string | undefined,
   ): Promise<CommandResult<CreateResult>> {
     const pair = buildEnvFilePair(environment, cwd);
     const created: string[] = [];
 
-    await fs.writeFile(pair.unencrypted, '', 'utf8');
+    if (from) {
+      const existing = await listExistingEnvironments(cwd);
+      if (!existing.includes(from)) {
+        return {
+          success: false,
+          error: `Base environment "${from}" does not exist. Available: ${existing.join(', ')}`,
+        };
+      }
+      const basePair = buildEnvFilePair(from, cwd);
+      const content = await buildExampleContent(basePair.unencrypted);
+      await fs.writeFile(pair.unencrypted, content, 'utf8');
+    } else {
+      await fs.writeFile(pair.unencrypted, '', 'utf8');
+    }
     created.push(pair.unencrypted);
 
-    setKeyValue('_ENVCTRL_INIT', '1', pair.encrypted);
+    if (from) {
+      await syncUnencryptedToEncrypted(environment, cwd);
+    } else {
+      setKeyValue('_ENVCTRL_INIT', '1', pair.encrypted);
+    }
     created.push(pair.encrypted);
 
     const config = (await readConfig(cwd)) ?? { environment };
@@ -182,7 +204,7 @@ export class CreateCommand implements ISubCommand<CreateOptions, CreateResult> {
     }
 
     const lines = [
-      `Created environment: ${environment}`,
+      `Created environment: ${environment}${from ? ` (from "${from}")` : ''}`,
       'Files:',
       ...created.map((f) => `  ${f}`),
     ];
@@ -192,7 +214,7 @@ export class CreateCommand implements ISubCommand<CreateOptions, CreateResult> {
 
     return {
       success: true,
-      data: { environment, createdFiles: created, isExample: false },
+      data: { environment, createdFiles: created, isExample: false, baseEnvironment: from },
       message: lines.join('\n'),
     };
   }
@@ -207,7 +229,7 @@ export class CreateBaseCommand extends BaseCommand {
       .description(
         'Create a new environment or generate .env.example (use "example" as the environment name)',
       )
-      .option('--from <env>', 'base environment for .env.example generation')
+      .option('--from <env>', 'copy key names (empty values) from this base environment')
       .action(async (environment: string, opts: { from?: string }) => {
         await this.dispatch(
           new CreateCommand(),
