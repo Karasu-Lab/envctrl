@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/Karasu-Lab/envctrl/compare/types-v1.3.0...types-v1.4.0) (2026-06-29)
+
+
+### Features
+
+* create .envctrl/config.json on init with build env auto-detection ([4183049](https://github.com/Karasu-Lab/envctrl/commit/41830496e0407e3649582a58eff041fe46076952))
+* create .envctrl/config.json on init with build env auto-detection ([36f1698](https://github.com/Karasu-Lab/envctrl/commit/36f16983f179c740b5ebf05470e8c07c81ca0de4))
+
 ## [1.3.0](https://github.com/Karasu-Lab/envctrl/compare/types-v1.2.0...types-v1.3.0) (2026-06-26)
 
 
