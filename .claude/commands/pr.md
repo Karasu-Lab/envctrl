@@ -24,6 +24,10 @@ Create a branch, commit staged or specified changes, push, and open a pull reque
 5. Push: `git push -u origin <branch>`
 6. Open PR: `gh pr create --title "type: description" --body "..."`
 
+## Response language
+
+- Respond to the user in the same language they used in `$ARGUMENTS` or the current conversation.
+
 ## PR body style
 
 - Language: English only
