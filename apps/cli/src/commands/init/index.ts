@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { createInterface } from 'node:readline/promises';
 import type { Command } from 'commander';
 import type { CommandContext, CommandResult, InitResult, ISubCommand } from '@envctrl/types';
 import { BaseCommand } from '../../base-command.js';
@@ -10,6 +11,44 @@ import { readRegistry, writeRegistry } from '../keystore/registry.js';
 import { findWorkspaceRoot, scanWorkspacePackages } from './workspace.js';
 import { detectBuildEnvironment } from '../../utils/build-env.js';
 import { writeConfig } from '../../utils/config.js';
+
+/**
+ * Traverses up from `dir` to determine whether it is inside a git repository.
+ */
+async function isInsideGitRepo(dir: string): Promise<boolean> {
+  let current = dir;
+  while (true) {
+    try {
+      await fs.access(path.join(current, '.git'));
+      return true;
+    } catch {}
+    const parent = path.dirname(current);
+    if (parent === current) return false;
+    current = parent;
+  }
+}
+
+/**
+ * Appends the given `patterns` to `rootDir/.gitignore`, skipping any that are
+ * already present. Returns `true` when the file was modified.
+ *
+ * @param rootDir - Directory containing the `.gitignore` file
+ * @param patterns - Lines to append (comments and glob patterns)
+ */
+async function appendGitignorePatterns(rootDir: string, patterns: string[]): Promise<boolean> {
+  const gitignorePath = path.join(rootDir, '.gitignore');
+  let existing = '';
+  try {
+    existing = await fs.readFile(gitignorePath, 'utf8');
+  } catch {}
+
+  const toAdd = patterns.filter((p) => !existing.includes(p));
+  if (toAdd.length === 0) return false;
+
+  const separator = existing === '' || existing.endsWith('\n') ? '' : '\n';
+  await fs.writeFile(gitignorePath, `${existing}${separator}${toAdd.join('\n')}\n`, 'utf8');
+  return true;
+}
 
 /** Options parsed by Commander for the `init` subcommand. */
 interface InitOptions {
@@ -103,6 +142,25 @@ export class InitCommand implements ISubCommand<InitOptions, InitResult> {
         configFile,
       );
 
+      let gitignoreUpdated = false;
+      if (!context.quiet) {
+        const inGit = await isInsideGitRepo(workspaceRoot);
+        if (inGit) {
+          const rl = createInterface({ input: process.stdin, output: process.stdout });
+          try {
+            const answer = await rl.question('Configure .gitignore for envctrl? [y/N] ');
+            if (answer.trim().toLowerCase() === 'y' || answer.trim().toLowerCase() === 'yes') {
+              gitignoreUpdated = await appendGitignorePatterns(workspaceRoot, [
+                '# envctrl: unencrypted env files',
+                '.env.*.unencrypted',
+              ]);
+            }
+          } finally {
+            rl.close();
+          }
+        }
+      }
+
       const lines = [`Workspace: ${workspaceRoot}`, `Keystore:  ${keystorePath}`];
       if (packages.length > 0) {
         lines.push('Packages:');
@@ -116,10 +174,13 @@ export class InitCommand implements ISubCommand<InitOptions, InitResult> {
         `Config:    ${configPath}`,
         `Environment: ${environment}${autoDetected ? ` (auto-detected from ${buildEnv.provider})` : ''}`,
       );
+      if (gitignoreUpdated) {
+        lines.push(`Updated:   ${path.join(workspaceRoot, '.gitignore')}`);
+      }
 
       return {
         success: true,
-        data: { workspaceRoot, packages, keystorePath, keysLinked, configPath, environment, autoDetected },
+        data: { workspaceRoot, packages, keystorePath, keysLinked, configPath, environment, autoDetected, gitignoreUpdated },
         message: lines.join('\n'),
       };
     } catch (err) {
