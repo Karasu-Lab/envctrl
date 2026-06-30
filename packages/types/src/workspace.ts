@@ -22,4 +22,6 @@ export interface InitResult {
   readonly environment: string;
   /** True when the environment was resolved from a detected CI/CD provider. */
   readonly autoDetected: boolean;
+  /** True when `.gitignore` was updated with envctrl patterns. */
+  readonly gitignoreUpdated: boolean;
 }
