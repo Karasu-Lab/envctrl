@@ -29,11 +29,14 @@ async function isInsideGitRepo(dir: string): Promise<boolean> {
 }
 
 /**
- * Appends the given `patterns` to `rootDir/.gitignore`, skipping any that are
- * already present. Returns `true` when the file was modified.
+ * Consolidates `patterns` into a dedicated section at the end of
+ * `rootDir/.gitignore`. Any line in the file that exactly matches one of the
+ * given patterns (including the section comment) is removed from its current
+ * position so the section is never duplicated. Returns `true` when the file
+ * was modified.
  *
  * @param rootDir - Directory containing the `.gitignore` file
- * @param patterns - Lines to append (comments and glob patterns)
+ * @param patterns - Lines that make up the section (comment header first, then glob patterns)
  */
 async function appendGitignorePatterns(rootDir: string, patterns: string[]): Promise<boolean> {
   const gitignorePath = path.join(rootDir, '.gitignore');
@@ -42,11 +45,31 @@ async function appendGitignorePatterns(rootDir: string, patterns: string[]): Pro
     existing = await fs.readFile(gitignorePath, 'utf8');
   } catch {}
 
-  const toAdd = patterns.filter((p) => !existing.includes(p));
-  if (toAdd.length === 0) return false;
+  const managed = new Set(patterns.map((p) => p.trim()));
 
-  const separator = existing === '' || existing.endsWith('\n') ? '' : '\n';
-  await fs.writeFile(gitignorePath, `${existing}${separator}${toAdd.join('\n')}\n`, 'utf8');
+  const filtered = existing
+    .split('\n')
+    .filter((line) => !managed.has(line.trim()));
+
+  const collapsed: string[] = [];
+  let prevBlank = false;
+  for (const line of filtered) {
+    const isBlank = line.trim() === '';
+    if (isBlank && prevBlank) continue;
+    collapsed.push(line);
+    prevBlank = isBlank;
+  }
+  while (collapsed.length > 0 && collapsed[collapsed.length - 1].trim() === '') {
+    collapsed.pop();
+  }
+
+  const cleaned = collapsed.join('\n');
+  const separator = cleaned === '' ? '' : '\n\n';
+  const newContent = `${cleaned}${separator}${patterns.join('\n')}\n`;
+
+  if (newContent === existing) return false;
+
+  await fs.writeFile(gitignorePath, newContent, 'utf8');
   return true;
 }
 
@@ -151,8 +174,9 @@ export class InitCommand implements ISubCommand<InitOptions, InitResult> {
             const answer = await rl.question('Configure .gitignore for envctrl? [y/N] ');
             if (answer.trim().toLowerCase() === 'y' || answer.trim().toLowerCase() === 'yes') {
               gitignoreUpdated = await appendGitignorePatterns(workspaceRoot, [
-                '# envctrl: unencrypted env files',
+                '# envctrl - ignore files',
                 '.env.*.unencrypted',
+                '.env.keys',
               ]);
             }
           } finally {
