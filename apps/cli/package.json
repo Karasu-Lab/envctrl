@@ -18,6 +18,11 @@
     "test:coverage": "vitest run --coverage",
     "prepublishOnly": "pnpm build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Karasu-Lab/envctrl.git",
+    "directory": "apps/cli"
+  },
   "publishConfig": {
     "access": "public"
   },
