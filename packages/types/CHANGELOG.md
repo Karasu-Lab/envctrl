@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0](https://github.com/Karasu-Lab/envctrl/compare/types-v1.6.0...types-v1.7.0) (2026-06-30)
+
+
+### Features
+
+* add run command to execute commands with decrypted env vars ([6fbb761](https://github.com/Karasu-Lab/envctrl/commit/6fbb761f10538083f9f3a5d13083a4890817b9d7))
+* add run command to execute commands with decrypted env vars ([7ce2b70](https://github.com/Karasu-Lab/envctrl/commit/7ce2b7010557b370b3f10e053477f1e9247c5822))
+
 ## [1.6.0](https://github.com/Karasu-Lab/envctrl/compare/types-v1.5.0...types-v1.6.0) (2026-06-30)
 
 
