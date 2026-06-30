@@ -63,3 +63,9 @@ export interface BlacklistResult {
   readonly environment: EnvironmentName;
   readonly blacklisted: EnvironmentName[];
 }
+
+/** Result of a `run` operation. */
+export interface RunResult {
+  readonly environment: EnvironmentName;
+  readonly exitCode: number;
+}

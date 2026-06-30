@@ -13,7 +13,7 @@ const execFileAsync = promisify(execFile);
  * Reads the `bin` field from the package's own `package.json` to avoid
  * hardcoding the path, which can change across dotenvx versions.
  */
-function resolveDotenvxBin(): string {
+export function resolveDotenvxBin(): string {
   const require = createRequire(import.meta.url);
   const pkgJsonPath = require.resolve('@dotenvx/dotenvx/package.json');
   const pkgJson = require('@dotenvx/dotenvx/package.json') as {

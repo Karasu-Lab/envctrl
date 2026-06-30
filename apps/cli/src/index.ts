@@ -9,6 +9,7 @@ import { ListBaseCommand } from './commands/list/index.js';
 import { RmBaseCommand } from './commands/rm/index.js';
 import { BlacklistBaseCommand } from './commands/blacklist/index.js';
 import { CreateBaseCommand } from './commands/create/index.js';
+import { RunBaseCommand } from './commands/run/index.js';
 
 const _require = createRequire(import.meta.url);
 const { version } = _require('../package.json') as { version: string };
@@ -31,5 +32,6 @@ new SetBaseCommand().register(program);
 new EncryptBaseCommand().register(program);
 new RmBaseCommand().register(program);
 new BlacklistBaseCommand().register(program);
+new RunBaseCommand().register(program);
 
 program.parseAsync(process.argv);
