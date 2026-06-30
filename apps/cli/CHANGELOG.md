@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.9.1](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.9.0...cli-v1.9.1) (2026-06-30)
+
+
+### Bug Fixes
+
+* move install.sh and uninstall.sh into apps/cli ([c6fee42](https://github.com/Karasu-Lab/envctrl/commit/c6fee42f2a58e8f3eaf8d59556ba9cb99f84f1ad))
+* move install.sh and uninstall.sh into apps/cli ([f3b2517](https://github.com/Karasu-Lab/envctrl/commit/f3b251744996a9f9449b6f5a2a89e182262dd018))
+
 ## [1.9.0](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.8.1...cli-v1.9.0) (2026-06-30)
 
 
