@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.0](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.9.1...cli-v1.10.0) (2026-06-30)
+
+
+### Features
+
+* add run command to execute commands with decrypted env vars ([6fbb761](https://github.com/Karasu-Lab/envctrl/commit/6fbb761f10538083f9f3a5d13083a4890817b9d7))
+* add run command to execute commands with decrypted env vars ([7ce2b70](https://github.com/Karasu-Lab/envctrl/commit/7ce2b7010557b370b3f10e053477f1e9247c5822))
+
 ## [1.9.1](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.9.0...cli-v1.9.1) (2026-06-30)
 
 
