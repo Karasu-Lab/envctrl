@@ -14,17 +14,24 @@ git clone --depth 1 "$REPO_URL" "$TMP_DIR"
 
 cd "$TMP_DIR"
 
-if ! command -v pnpm &>/dev/null; then
-  echo "Error: pnpm is required but not found. Install it from https://pnpm.io/installation" >&2
-  exit 1
-fi
-
-echo "Installing dependencies..."
-pnpm install --frozen-lockfile
-
 echo "Building..."
-pnpm --filter @envctrl/types build
-pnpm --filter @envctrl/cli build
+if command -v pnpm &>/dev/null; then
+  pnpm install --frozen-lockfile
+  pnpm --filter @envctrl/types build
+  pnpm --filter @envctrl/cli build
+else
+  (cd packages/types && npm install && npm run build)
+
+  node -e "
+    const fs = require('fs');
+    const p = 'apps/cli/package.json';
+    const pkg = JSON.parse(fs.readFileSync(p, 'utf8'));
+    pkg.devDependencies['@envctrl/types'] = 'file:../../packages/types';
+    fs.writeFileSync(p, JSON.stringify(pkg, null, 2));
+  "
+
+  (cd apps/cli && npm install && npm run build)
+fi
 
 echo "Installing envctrl globally..."
 cd apps/cli
