@@ -15,8 +15,8 @@ git clone --depth 1 "$REPO_URL" "$TMP_DIR"
 cd "$TMP_DIR"
 
 if ! command -v pnpm &>/dev/null; then
-  echo "Installing pnpm..."
-  npm install -g pnpm
+  echo "Error: pnpm is required but not found. Install it from https://pnpm.io/installation" >&2
+  exit 1
 fi
 
 echo "Installing dependencies..."
