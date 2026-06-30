@@ -39,8 +39,8 @@ async function listExistingEnvironments(cwd: string): Promise<EnvironmentName[]>
 }
 
 /**
- * Reads keys from an unencrypted env file and returns a `.env.example`-style
- * string with each key set to an empty value.
+ * Reads an unencrypted env file and returns a derived string that preserves
+ * comments and blank lines while clearing all values (key names only).
  */
 async function buildExampleContent(unencryptedPath: string): Promise<string> {
   let raw = '';
@@ -49,9 +49,20 @@ async function buildExampleContent(unencryptedPath: string): Promise<string> {
   } catch {
     return '';
   }
-  const entries = parseEnvContent(raw);
-  const lines = Object.keys(entries).map((k) => `${k}=`);
-  return lines.length > 0 ? lines.join('\n') + '\n' : '';
+
+  const result = raw.split('\n').map((line) => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) {
+      return line;
+    }
+    const eqIdx = trimmed.indexOf('=');
+    if (eqIdx === -1) {
+      return line;
+    }
+    return `${trimmed.slice(0, eqIdx).trim()}=`;
+  });
+
+  return result.join('\n');
 }
 
 /**
