@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.0](https://github.com/Karasu-Lab/envctrl/compare/types-v1.5.0...types-v1.6.0) (2026-06-30)
+
+
+### Features
+
+* prompt user to configure .gitignore during init ([66d214e](https://github.com/Karasu-Lab/envctrl/commit/66d214e1447d2a97295138a38a9ab13a20470c49))
+* prompt user to configure .gitignore during init ([452f852](https://github.com/Karasu-Lab/envctrl/commit/452f8527b6e3b8ff21856b47e80b535bddda8f1b))
+
 ## [1.5.0](https://github.com/Karasu-Lab/envctrl/compare/types-v1.4.0...types-v1.5.0) (2026-06-29)
 
 
