@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.1](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.8.0...cli-v1.8.1) (2026-06-30)
+
+
+### Bug Fixes
+
+* preserve comments and blank lines when creating env from base ([7268fa2](https://github.com/Karasu-Lab/envctrl/commit/7268fa2eecc48115b80c5557a88d8f65c92bf962))
+* preserve comments and blank lines when creating env from base ([16a9c8c](https://github.com/Karasu-Lab/envctrl/commit/16a9c8cfd3b6029727eb9058da5325e771f3e6c5))
+
 ## [1.8.0](https://github.com/Karasu-Lab/envctrl/compare/cli-v1.7.0...cli-v1.8.0) (2026-06-29)
 
 
